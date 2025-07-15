@@ -14,6 +14,7 @@ final class SDKDelegate: OnsideDelegate {
     // MARK: - Public Properties
 
     var shouldForceLocalLoginMethods = false
+    var countryCodeHint: String?
 
     // MARK: - Constructors
 
@@ -36,7 +37,7 @@ final class SDKDelegate: OnsideDelegate {
     }
 
     func onsideDefaultCountryCodeAssumption() -> String? {
-        "NL"
+        countryCodeHint
     }
 
 }

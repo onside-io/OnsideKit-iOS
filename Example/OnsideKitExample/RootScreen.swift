@@ -83,8 +83,16 @@ struct RootScreen: View {
                 } else {
                     VStack(spacing: 0.0) {
                         SectionItem(
-                            leading: { SectionItemTitle(title: "Country Code") },
-                            trailing: { SectionItemTextValue(title: "n/a") }
+                            leading: { SectionItemTitle(title: "Country Code Hint") },
+                            trailing: {
+                                TextField("", text: .init(
+                                    get: { sdkDelegate.countryCodeHint ?? "" },
+                                    set: { sdkDelegate.countryCodeHint = $0 }
+                                ))
+                                .padding(8.0)
+                                .background(Color(.tertiarySystemBackground))
+                                .clipShape(RoundedRectangle(cornerRadius: 10.0))
+                            }
                         )
                         SectionItem(
                             leading: {
