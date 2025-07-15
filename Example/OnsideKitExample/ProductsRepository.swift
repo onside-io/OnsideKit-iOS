@@ -33,6 +33,7 @@ final class ProductsRepository: OnsideProductsRequestDelegate {
 
     func onsideProductsRequestRequest(_ request: OnsideProductsRequest, didFailWithError error: OnsideProductsRequestError) {
         print("Products reloading failed: \(error)")
+        products = []
         isReloading = false
     }
 
