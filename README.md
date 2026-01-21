@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://onside.io/_next/static/media/hero_brand_icon.ba8d3536.svg" width="170" />
+    <img src="Assets/icon.png" width="170" />
 </p>
 <h1 align="center">OnsideKit for iOS</h1>
 

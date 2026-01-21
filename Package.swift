@@ -14,8 +14,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "OnsideKit",
-            url: "https://github.com/onside-io/OnsideKit-iOS/releases/download/0.1.21/OnsideKit.xcframework.zip",
-            checksum: "d637c03abcd2bc07d8afbbac26ea79fcb6a1d33c239468ecc693808759042fe5"
+            url: "https://github.com/onside-io/OnsideKit-iOS/releases/download/0.2.0/OnsideKit.xcframework.zip",
+            checksum: "427b7e9b92bae0b6afff7e84481a02a7afbf73a994834e97895f23e8d744d616"
         )
     ]
 )
