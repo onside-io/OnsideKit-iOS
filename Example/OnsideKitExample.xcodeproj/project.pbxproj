@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8AB0BBD92E475E58004564CE /* OnsideKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8AB0BBD82E475E58004564CE /* OnsideKit */; };
+		8ABFDEBF2F218FDD006C77B6 /* OnsideKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8ABFDEBE2F218FDD006C77B6 /* OnsideKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8AB0BBD92E475E58004564CE /* OnsideKit in Frameworks */,
+				8ABFDEBF2F218FDD006C77B6 /* OnsideKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +83,7 @@
 			);
 			name = OnsideKitExample;
 			packageProductDependencies = (
-				8AB0BBD82E475E58004564CE /* OnsideKit */,
+				8ABFDEBE2F218FDD006C77B6 /* OnsideKit */,
 			);
 			productName = OnsideKitExample;
 			productReference = 8A5536052E23E6A200666D69 /* OnsideKitExample.app */;
@@ -114,7 +114,7 @@
 			mainGroup = 8A5535FC2E23E6A200666D69;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				8AB0BBD72E475E58004564CE /* XCRemoteSwiftPackageReference "OnsideKit-iOS" */,
+				8ABFDEBD2F218FDD006C77B6 /* XCRemoteSwiftPackageReference "OnsideKit-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8A5536062E23E6A200666D69 /* Products */;
@@ -354,20 +354,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		8AB0BBD72E475E58004564CE /* XCRemoteSwiftPackageReference "OnsideKit-iOS" */ = {
+		8ABFDEBD2F218FDD006C77B6 /* XCRemoteSwiftPackageReference "OnsideKit-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onside-io/OnsideKit-iOS";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.20;
+				minimumVersion = 0.2.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		8AB0BBD82E475E58004564CE /* OnsideKit */ = {
+		8ABFDEBE2F218FDD006C77B6 /* OnsideKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 8AB0BBD72E475E58004564CE /* XCRemoteSwiftPackageReference "OnsideKit-iOS" */;
+			package = 8ABFDEBD2F218FDD006C77B6 /* XCRemoteSwiftPackageReference "OnsideKit-iOS" */;
 			productName = OnsideKit;
 		};
 /* End XCSwiftPackageProductDependency section */

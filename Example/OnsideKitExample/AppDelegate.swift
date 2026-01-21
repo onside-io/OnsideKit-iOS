@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  OnsideKitExample
-//
-//  Created by Alexander Goremykin on 13.07.2025.
-//
-
 import UIKit
 import SwiftUI
 import OnsideKit
@@ -18,6 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        Onside.initialize()
         Onside.callbackScheme = "sdk-example-scheme"
 
         let window = UIWindow()

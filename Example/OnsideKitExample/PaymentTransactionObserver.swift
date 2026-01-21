@@ -1,10 +1,3 @@
-//
-//  PaymentTransactionObserver.swift
-//  tExample
-//
-//  Created by Alexander Goremykin on 13.07.2025.
-//
-
 import Observation
 import OnsideKit
 
@@ -21,15 +14,15 @@ final class PaymentTransactionObserver: OnsidePaymentTransactionObserver {
     // MARK: - Constructors
 
     init() {
-        storefront = Onside.paymentQueue().storefront
-        Onside.paymentQueue().add(observer: self)
+        storefront = Onside.defaultPaymentQueue().storefront
+        Onside.defaultPaymentQueue().add(observer: self)
     }
 
     // MARK: - Public Methods
 
     func restorePurchases() {
         isRestoringPurchases = true
-        Onside.paymentQueue().restoreCompletedTransactions()
+        Onside.defaultPaymentQueue().restoreCompletedTransactions(completion: nil)
         print("Purchases restoring started")
     }
 
@@ -37,17 +30,17 @@ final class PaymentTransactionObserver: OnsidePaymentTransactionObserver {
         updatedTransactions.forEach { transaction in
             switch transaction.transactionState {
             case .purchasing:
-                print("Purchasing of \"\(transaction.product.localizedDescription)\" started")
+                print("Purchasing of \"\(transaction.payment.product.localizedDescription)\" started")
             case .purchased:
-                print("\(transaction.product.localizedDescription) purchased")
-                addPurchasedProductIfNeeded(transaction.product)
+                print("\(transaction.payment.product.localizedDescription) purchased")
+                addPurchasedProductIfNeeded(transaction.payment.product)
                 queue.finishTransaction(transaction)
             case .restored:
-                print("\"\(transaction.product.localizedDescription)\" restored")
-                addPurchasedProductIfNeeded(transaction.product)
+                print("\"\(transaction.payment.product.localizedDescription)\" restored")
+                addPurchasedProductIfNeeded(transaction.payment.product)
                 queue.finishTransaction(transaction)
             case .failed:
-                print("Purchasing of \"\(transaction.product.localizedDescription)\" failed: \(transaction.error?.localizedDescription ?? "n/a")")
+                print("Purchasing of \"\(transaction.payment.product.localizedDescription)\" failed: \(transaction.error?.localizedDescription ?? "n/a")")
                 queue.finishTransaction(transaction)
             @unknown default:
                 queue.finishTransaction(transaction)
@@ -57,7 +50,7 @@ final class PaymentTransactionObserver: OnsidePaymentTransactionObserver {
 
     func onsidePaymentQueue(_ queue: OnsidePaymentQueue, removedTransactions: [OnsidePaymentTransaction]) {
         removedTransactions.forEach {
-            print("Transaction of \"\($0.product.localizedDescription)\" removed")
+            print("Transaction of \"\($0.payment.product.localizedDescription)\" removed")
         }
     }
 

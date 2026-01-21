@@ -1,10 +1,3 @@
-//
-//  Section.swift
-//  OnsideKitExample
-//
-//  Created by Alexander Goremykin on 14.07.2025.
-//
-
 import SwiftUI
 
 struct Section<Content: View>: View {
