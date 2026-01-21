@@ -1,10 +1,3 @@
-//
-//  OnsideDelegate.swift
-//  OnsideKitExample
-//
-//  Created by Alexander Goremykin on 14.07.2025.
-//
-
 import UIKit
 import OnsideKit
 

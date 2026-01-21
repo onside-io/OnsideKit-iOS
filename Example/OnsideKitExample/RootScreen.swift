@@ -1,10 +1,3 @@
-//
-//  RootScreen.swift
-//  OnsideKitExample
-//
-//  Created by Alexander Goremykin on 13.07.2025.
-//
-
 import SwiftUI
 import OnsideKit
 
@@ -157,7 +150,7 @@ struct RootScreen: View {
                         VStack(alignment: .leading, spacing: 20.0) {
                             ForEach(productsRepository.products, id: \.productIdentifier) { product in
                                 Button(action: {
-                                    Onside.paymentQueue().add(product)
+                                    Onside.defaultPaymentQueue().add(.init(product: product), completion: nil)
                                 }) {
                                     VStack(alignment: .leading, spacing: 4.0) {
                                         Text(product.localizedTitle)
