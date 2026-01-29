@@ -21,9 +21,15 @@ final class PaymentTransactionObserver: OnsidePaymentTransactionObserver {
     // MARK: - Public Methods
 
     func restorePurchases() {
-        isRestoringPurchases = true
-        Onside.defaultPaymentQueue().restoreCompletedTransactions(completion: nil)
-        print("Purchases restoring started")
+        Onside.defaultPaymentQueue().restoreCompletedTransactions { [weak self] in
+            switch $0 {
+            case .success:
+                print("Purchases restoring started")
+                self?.isRestoringPurchases = true
+            case .failure:
+                self?.isRestoringPurchases = false
+            }
+        }
     }
 
     func onsidePaymentQueue(_ queue: OnsidePaymentQueue, updatedTransactions: [OnsidePaymentTransaction]) {
