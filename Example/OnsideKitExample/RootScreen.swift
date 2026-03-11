@@ -8,6 +8,8 @@ struct RootScreen: View {
     @State private var sdkDelegate = SDKDelegate()
     @State private var sdkAppearance = OnsideUIThemeMode.auto
 
+    @State private var showNotSupportedAlert = false
+
     var body: some View {
         ScrollView {
             VStack(spacing: 24.0) {
@@ -25,6 +27,11 @@ struct RootScreen: View {
             .padding(.bottom, 16.0)
         }
         .background(Color(.systemBackground))
+        .alert("Not supported in local testing", isPresented: $showNotSupportedAlert) {
+            Button("OK") { showNotSupportedAlert = false }
+        } message: {
+            Text(".storekit file enabled")
+        }
     }
 
     var appearanceSection: some View {
@@ -125,7 +132,12 @@ struct RootScreen: View {
                 HStack(spacing: 16.0) {
                     Button(
                         action: {
-                            Onside.presentPaymentMethodsManager()
+                            Onside.presentPaymentMethodsManager {
+                                switch $0 {
+                                case .failure(.notSupportedInLocalTesting): showNotSupportedAlert = true
+                                default: break
+                                }
+                            }
                         },
                         label: {
                             Text("Show Available")

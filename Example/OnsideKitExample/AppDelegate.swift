@@ -11,7 +11,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        Onside.initialize()
+//        Onside.initialize()
+        Onside.initialize(storeKitConfigurationName: "Example")
         Onside.callbackScheme = "sdk-example-scheme"
 
         let window = UIWindow()

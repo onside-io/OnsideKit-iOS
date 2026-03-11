@@ -40,6 +40,9 @@ final class ProductsRepository: OnsideProductsRequestDelegate {
     private var currentRequest: OnsideProductsRequest?
 
     private let productSKUs: Set<String> = [
+        "com.product.example.consumable",
+        "com.product.example.non_consumable"
+
         // Insert your SKUs here
     ]
 
