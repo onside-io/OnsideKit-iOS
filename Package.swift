@@ -3,9 +3,6 @@
 
 import PackageDescription
 
-let url = "https://github.com/onside-io/OnsideKit-iOS/releases/download/0.8.0/OnsideKit.xcframework.zip"
-let checksum = "85af10c0cdfa33c7b77a5506230c7f04e838e6e1dc942257ff26f3c017cfc9a8"
-
 let package = Package(
     name: "OnsideKit",
     products: [
@@ -13,7 +10,15 @@ let package = Package(
         .library(name: "OnsideKitLite", targets: ["OnsideKitLite"])
     ],
     targets: [
-        .binaryTarget(name: "OnsideKit",     url: url, checksum: checksum),
-        .binaryTarget(name: "OnsideKitLite", url: url, checksum: checksum)
+        .binaryTarget(
+            name: "OnsideKit",
+            url: "https://github.com/onside-io/OnsideKit-iOS/releases/download/0.8.1/OnsideKit.xcframework.zip",
+            checksum: "e01d8aac8b6298dd79df65863f1984350a0334b8936e2eea87c85144d068f644"
+        ),
+        .binaryTarget(
+            name: "OnsideKitLite",
+            url: "https://github.com/onside-io/OnsideKit-iOS/releases/download/0.8.1/OnsideKitLite.xcframework.zip",
+            checksum: "0705e1ad97b7ed23687d0cb106e979acbb71ec3f24df3a39c0d536bc6a960c49"
+        )
     ]
 )
