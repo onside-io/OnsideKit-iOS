@@ -68,8 +68,8 @@ The full documentation covers installation, initialization, authentication, prod
 ➡️ **[Read the full documentation](https://docs.onside.io/sdk/)**
 
 ### Other platforms
-*   **Web (`WKWebView`)** — call OnsideKit from JavaScript via the bridge. The contract is in [`onside.d.ts`](onside.d.ts); see the [JS ↔ Native Bridge](https://docs.onside.io/sdk/js-bridge) guide.
-*   **Unity** — integrate from C# with the OnsideKit Unity package, available as a `.unitypackage` on the [Releases](https://github.com/onside-io/OnsideKit-iOS/releases) page. See the [Unity](https://docs.onside.io/sdk/unity) guide.
+*   **Web (`WKWebView`)** — call OnsideKit from JavaScript via the bridge. The contract is in [`onside.d.ts`](onside.d.ts); see the [JS ↔ Native Bridge](https://docs.onside.io/sdk/integrations/js-bridge) guide.
+*   **Unity** — integrate from C# with the OnsideKit Unity package, available as a `.unitypackage` on the [Releases](https://github.com/onside-io/OnsideKit-iOS/releases) page. See the [Unity](https://docs.onside.io/sdk/integrations/unity) guide.
 
 ## Example
 A sample app is in [`Example/`](Example). It demonstrates authentication, fetching products, purchasing, and restoring purchases — see [`Example/README.md`](Example/README.md) for setup.
