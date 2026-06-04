@@ -3,35 +3,81 @@
 </p>
 <h1 align="center">OnsideKit for iOS</h1>
 
-![iOS](https://img.shields.io/badge/iOS-16.0%2B-blue.svg) [![Xcode](https://img.shields.io/badge/Xcode-14.0%2B-blue.svg)](https://img.shields.io/badge/Xcode-14.1%2B-blue.svg) [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/onside-io/OnsideKit-iOS/blob/main/LICENSE)
+![iOS](https://img.shields.io/badge/iOS-16.0%2B-blue.svg) ![Xcode](https://img.shields.io/badge/Xcode-26.0%2B-blue.svg) [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/onside-io/OnsideKit-iOS/blob/main/LICENSE)
 
-The **OnsideKit SDK** allows you to seamlessly integrate in-app purchases and subscriptions into your applications. It handles the entire payment flow, providing a secure and reliable experience for your users while simplifying the implementation process for you.
+**OnsideKit** lets you integrate in-app purchases into your iOS app. It handles the entire payment flow — from product display to checkout — providing a secure experience for your users while keeping integration simple. The API is intentionally modeled on Apple's StoreKit, so it feels familiar to experienced iOS developers.
 
 ## Features
-*   **✨ Familiar StoreKit-like API**: Designed to be highly similar to Apple's native StoreKit framework, ensuring a minimal learning curve for experienced iOS developers.
-*   **💳 Multiple Payment Methods**: Securely process payments via **Apple Pay** and **Bank Cards**.
-*   **🔄 Unified Purchase Flow**: A single, streamlined process for handling both one-time in-app purchases and recurring subscriptions.
-*   **⚙️ Flexible Payment Processing**: Support for both one-stage (immediate charge) and two-stage payments (authorize and capture later).
+*   **✨ Familiar StoreKit-like API** — a minimal learning curve if you know StoreKit.
+*   **💳 Apple Pay & bank cards** — plus a built-in payment-methods management screen.
+*   **🛒 Unified purchase flow** — one process for consumable and non-consumable products.
+*   **⚠️ Clear, typed errors** — informative value types and a unified set of errors.
+*   **🌐 Native, web & Unity** — a native Swift API, a JavaScript bridge for `WKWebView`-based apps, and a Unity package.
+*   **🧪 Offline local testing** — develop and QA purchases with a `.storekit` file, no backend required.
 
 ## Requirements
 *   iOS 16.0+
-*   Xcode 14.0+
+*   Xcode 26+
+
+## Distributions
+OnsideKit ships as two prebuilt binary `.xcframework` products:
+
+| Product | Apple Pay | When to use |
+| --- | --- | --- |
+| **OnsideKit** | ✅ Included | The default — use it unless you have a reason not to. |
+| **OnsideKitLite** | ❌ Excluded | The same SDK without the PassKit dependency, for apps that cannot include PassKit (no Apple Pay). |
+
+## Installation
+
+### Swift Package Manager
+In Xcode: **File → Add Package Dependencies…**, enter the repository URL, and choose the **OnsideKit** (or **OnsideKitLite**) product:
+
+```
+https://github.com/onside-io/OnsideKit-iOS
+```
+
+Or add it to your `Package.swift`:
+
+```swift
+.package(url: "https://github.com/onside-io/OnsideKit-iOS", from: "0.8.1")
+```
+
+### CocoaPods
+Add one of the pods to your `Podfile`:
+
+```ruby
+pod 'OnsideKit', :git => 'https://github.com/onside-io/OnsideKit-iOS.git'
+# or, without Apple Pay / PassKit:
+# pod 'OnsideKitLite', :git => 'https://github.com/onside-io/OnsideKit-iOS.git'
+```
+
+### Manual
+Download `OnsideKit.xcframework.zip` (or `OnsideKitLite.xcframework.zip`) from the [Releases](https://github.com/onside-io/OnsideKit-iOS/releases) page, drag the `.xcframework` into your target's **Frameworks, Libraries, and Embedded Content**, and select **Embed & Sign**.
+
+➡️ **[Full installation guide](https://docs.onside.io/sdk/getting-started/installation)**
 
 ## Getting Started
-1.  **Configure Products**: Set up your paid apps, in-app purchases, and subscriptions in the [Onside Developer Console](https://developer.onside.io). This will allow you to get the product identifiers needed to work with the SDK.
-2.  **Integrate the SDK**: `OnsideKit` distributes as a pre-compiled binary framework (`.xcframework`) for fast build times and simple integration. You can add it to your project using Swift Package Manager, CocoaPods, or by manually linking the framework.
-For detailed instructions on all installation methods, please refer to our official documentation:
-#### ➡️ **[View Full Installation Guide](https://docs.onside.io/sdk/installation-guide)**
+1.  **Configure products** in the [Onside Developer Console](https://developer.onside.io) to get the product identifiers you'll request from the SDK.
+2.  **Initialize the SDK** at launch, register your callback URL scheme, and start fetching products and making purchases.
+
+➡️ **[Quick Start](https://docs.onside.io/sdk/getting-started/quick-start)** — a minimal, end-to-end example.
 
 ## Documentation
-For a complete guide on how to use `OnsideKit`, including configuration, authentication, making purchases, and API reference, please visit our official documentation portal.
+The full documentation covers installation, initialization, authentication, products, purchasing, purchase validation, customization, attribution, local testing, and a complete API reference.
 
-#### ➡️ **[Read the Full Documentation](https://docs.onside.io/sdk/)**
+➡️ **[Read the full documentation](https://docs.onside.io/sdk/)**
+
+### Other platforms
+*   **Web (`WKWebView`)** — call OnsideKit from JavaScript via the bridge. The contract is in [`onside.d.ts`](onside.d.ts); see the [JS ↔ Native Bridge](https://docs.onside.io/sdk/js-bridge) guide.
+*   **Unity** — integrate from C# with the OnsideKit Unity package, available as a `.unitypackage` on the [Releases](https://github.com/onside-io/OnsideKit-iOS/releases) page. See the [Unity](https://docs.onside.io/sdk/unity) guide.
+
+## Example
+A sample app is in [`Example/`](Example). It demonstrates authentication, fetching products, purchasing, and restoring purchases — see [`Example/README.md`](Example/README.md) for setup.
 
 ## Support
-If you have questions about SDK integration, monetization, or want to provide feedback, please reach out to our developer support team:
 *   **Email**: [support@onside.io](mailto:support@onside.io)
-*   **Chat**: Use the chat feature in the developer console.
+*   **Apple Pay / merchant setup**: [merchant-support@onside.io](mailto:merchant-support@onside.io)
+*   **Chat**: use the chat feature in the developer console.
 
 ## License
 `OnsideKit` is released under the MIT License. See the [`LICENSE`](https://github.com/onside-io/OnsideKit-iOS/blob/main/LICENSE) file for more information.
