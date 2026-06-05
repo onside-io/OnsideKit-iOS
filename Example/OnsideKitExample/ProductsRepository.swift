@@ -24,7 +24,7 @@ final class ProductsRepository: OnsideProductsRequestDelegate {
         isReloading = true
     }
 
-    func onsideProductsRequestRequest(_ request: OnsideProductsRequest, didFailWithError error: OnsideProductsRequestError) {
+    func onsideProductsRequest(_ request: OnsideProductsRequest, didFailWithError error: OnsideProductsRequestError) {
         print("Products reloading failed: \(error)")
         products = []
         isReloading = false
