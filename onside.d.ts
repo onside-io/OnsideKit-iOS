@@ -292,7 +292,9 @@ export type OnsideTransactionsRestoreError =
   | { serviceUnavailable: {} }
   | { internalError: {} };
 
-export type OnsidePaymentTransactionError = { cancelled: {} };
+export type OnsidePaymentTransactionError =
+  | { cancelled: {} }
+  | { presentationFailed: {} };
 
 export type OnsideAttributionMetadataError =
   | { connectionError: {} }
