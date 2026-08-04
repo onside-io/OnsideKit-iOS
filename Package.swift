@@ -12,13 +12,13 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "OnsideKit",
-            url: "https://github.com/onside-io/OnsideKit-iOS/releases/download/1.1.0/OnsideKit.xcframework.zip",
-            checksum: "45139750d0fdfdfa8ce75bec2fa4c403283f096942a46fcd852682082112e6f7"
+            url: "https://github.com/onside-io/OnsideKit-iOS/releases/download/1.2.0/OnsideKit.xcframework.zip",
+            checksum: "f60ecb7908e367d9b72e7cbacff9e5f0cbfde9827770c808a65c811937953c69"
         ),
         .binaryTarget(
             name: "OnsideKitLite",
-            url: "https://github.com/onside-io/OnsideKit-iOS/releases/download/1.1.0/OnsideKitLite.xcframework.zip",
-            checksum: "5fca1eafca550519aeaa18280ab30feeef5658bbb9b77d457e780c0c6fbb918a"
+            url: "https://github.com/onside-io/OnsideKit-iOS/releases/download/1.2.0/OnsideKitLite.xcframework.zip",
+            checksum: "b0a7ea4ff0c781a130b7ab5d4bc83b100336525368a344c758ba6d8738e49d4e"
         )
     ]
 )
