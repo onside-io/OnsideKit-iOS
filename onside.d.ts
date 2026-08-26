@@ -4,15 +4,30 @@
 //   await window.onside.initializeOnside('v1');
 //
 // After initialization:
-//   - Functions on `window.onside` are JS → native calls.
-//     Each returns a Promise (resolves with success payload, rejects with
-//     a typed error envelope). A few setters return `void` synchronously.
+//   - Every function on `window.onside` is a JS → native call and returns a
+//     Promise. There are no synchronous functions, including the setters.
 //   - Native → JS events are delivered via callbacks; assign your handler
 //     to the corresponding optional property
 //     (e.g. `window.onside.onTransactionsUpdated = ...`).
 //
-// All native error enums serialize as `{ <caseName>: {} }`. Use
-// `'caseName' in error` to discriminate, or pattern-match the union.
+// A rejected call carries one of two shapes:
+//
+//   1. A domain error — the native error enum, serialized as
+//      `{ <caseName>: {} }`. Discriminate with `'caseName' in error`, or
+//      pattern-match the union types below.
+//   2. A bridge error — an `Error` instance with `name === 'PontoonBridgeError'`
+//      and a stable `code`. Raised when the call never reached native logic:
+//      malformed arguments, an unknown function, a frame the security policy
+//      refuses. See `OnsideBridgeError`.
+//
+// Check `error instanceof Error` (or `'code' in error`) to tell them apart.
+//
+// The bridge is installed in the main frame only, and only for documents whose
+// origin the host allowed when configuring the web view. Sub-frames and opaque
+// origins (for example `loadHTMLString` without a base URL) never receive it.
+//
+// Properties named `_pontoon*` on `window.onside` are reserved by the bridge
+// and must not be assigned by page code.
 
 declare global {
   interface Window {
@@ -24,24 +39,31 @@ export interface OnsideJSBridge {
   // ───────────────────────── Bootstrap ─────────────────────────
 
   /**
-   * Bootstrap the bridge. Must be awaited before any other call.
-   * Currently only `'v1'` is supported.
+   * Bootstrap the bridge. Must be awaited before any other call — until it
+   * resolves the other functions are not defined, so calling one throws a
+   * `TypeError` synchronously rather than rejecting.
+   *
+   * Idempotent: safe to call again after a page reload, and safe to call twice.
+   * Currently only `'v1'` is supported; any other value rejects with a
+   * `PontoonBridgeError` whose `code` is `'invalidArguments'`.
+   *
+   * Rejects with `OnsideInitializeError` if the bridge could not be installed.
    */
   initializeOnside(version: 'v1'): Promise<void>;
 
   // ─────────────────────── Configuration ───────────────────────
 
   /** Override the theme used for native UI presented from JS. */
-  setAppearance(theme: 'light' | 'dark' | 'system'): void;
+  setAppearance(theme: 'light' | 'dark' | 'system'): Promise<void>;
 
   /** Force local-only login methods on the login screen. */
-  setShouldForceLocalLoginMethods(force: boolean): void;
+  setShouldForceLocalLoginMethods(force: boolean): Promise<void>;
 
   /**
    * Default country code assumed when system region is unknown.
    * Empty string clears the assumption.
    */
-  setDefaultCountryCodeAssumption(countryCode: string): void;
+  setDefaultCountryCodeAssumption(countryCode: string): Promise<void>;
 
   // ──────────────────────── Analytics ──────────────────────────
 
@@ -54,7 +76,7 @@ export interface OnsideJSBridge {
   trackEvent(input: {
     name: string;
     parameters?: Record<string, JSEventParameterValue>;
-  }): void;
+  }): Promise<void>;
 
   // ─────────────────────────── Auth ────────────────────────────
 
@@ -62,7 +84,7 @@ export interface OnsideJSBridge {
   requestLogin(): Promise<void>;
 
   /** Log out the current user. */
-  logout(): void;
+  logout(): Promise<void>;
 
   // ──────────────────────────── UI ─────────────────────────────
 
@@ -121,6 +143,14 @@ export interface OnsideJSBridge {
 
   /**
    * Finish a transaction by its opaque id (`JSPaymentTransaction.id`).
+   *
+   * Removal is immediate only for a transaction that has not been sent for
+   * payment yet. For `purchased`, `restored` and `failed` the transaction is
+   * marked for completion and removed once that completes, so
+   * `onTransactionsRemoved` may arrive noticeably later. A transaction that is
+   * `purchasing` because payment is already in flight cannot be finished: the
+   * promise still resolves, but nothing happens — wait for a terminal state.
+   *
    * Rejects with `JSFinishTransactionError`.
    */
   finishTransaction(id: string): Promise<void>;
@@ -163,14 +193,36 @@ export interface OnsideJSBridge {
   ): void | Promise<void>;
 
   /**
-   * Async pre-flight gate the queue invokes before processing a
-   * transaction in a particular storefront. Return `false` to cancel
-   * the transaction. If no handler is registered, native defaults
-   * to `true`.
+   * Gate the queue invokes when a queued transaction is about to execute in a
+   * storefront different from the one it was enqueued in — typically because
+   * the user logged into an account registered in another country, where the
+   * price or availability differs. Same-storefront purchases never call it.
+   *
+   * Return `false` to discard the transaction. It is then removed from the
+   * queue and reported through `onTransactionsRemoved`; it does not reach
+   * `failed`, and the originating `purchase` promise has already resolved.
+   *
+   * Native defaults to `true` when no handler is registered, when the handler
+   * throws, and when it returns anything that is not a boolean — a handler that
+   * forgets to `return` therefore approves the purchase.
    */
   shouldContinueTransaction?(input: {
     transaction: JSPaymentTransaction;
     storefront: JSStorefront;
+  }): boolean | Promise<boolean>;
+
+  /**
+   * Async pre-flight gate the queue invokes when `purchase` had to log
+   * the user in first. Fires after the login succeeds and before the
+   * transaction is enqueued. Return `false` to drop the purchase — the
+   * `purchase` call then rejects with `rejectedAfterLogin` and no
+   * transaction callback is delivered.
+   *
+   * Native defaults to `true` when no handler is registered, when the handler
+   * throws, and when it returns anything that is not a boolean.
+   */
+  shouldContinueTransactionAfterLogin?(input: {
+    transaction: JSPaymentTransaction;
   }): boolean | Promise<boolean>;
 }
 
@@ -204,6 +256,11 @@ export interface JSProduct {
 }
 
 export interface JSStorefront {
+  /**
+   * Opaque storefront handle. Stable for the lifetime of the app process only —
+   * it is regenerated on every launch, so never persist it or compare it across
+   * sessions. Use `countryCode` for anything durable.
+   */
   id: string;
   countryCode: string;
 }
@@ -222,7 +279,12 @@ export type JSPaymentTransactionState =
 export interface JSPaymentTransaction {
   /** Opaque UUID string. Use with `finishTransaction`. */
   id: string;
+  /** Server-side order id. Absent until payment has been sent. */
   transactionIdentifier?: string;
+  /**
+   * Currently always equal to `transactionIdentifier`. Reserved for a future
+   * renewal chain — do not group renewals by it yet.
+   */
   originalTransactionIdentifier?: string;
   payment: JSPayment;
   transactionState: JSPaymentTransactionState;
@@ -281,7 +343,8 @@ export type OnsideSignedInAppsHistoryRequestError =
 
 export type OnsidePaymentMethodsManagerError =
   | { loginDiscarded: {} }
-  | { notSupportedInLocalTesting: {} };
+  | { notSupportedInLocalTesting: {} }
+  | { presentationFailed: {} };
 
 export type OnsidePaymentQueueRequestRestoreError = { loginDiscarded: {} };
 
@@ -305,7 +368,30 @@ export type OnsideAttributionMetadataError =
 /** JS-bridge specific error for `purchase`. */
 export type JSPurchaseError =
   | { unknownProduct: {} }
-  | { loginDiscarded: {} };
+  | { loginDiscarded: {} }
+  | { rejectedAfterLogin: {} };
 
 /** JS-bridge specific error for `finishTransaction`. */
 export type JSFinishTransactionError = { unknownTransaction: {} };
+
+/** Rejection of `initializeOnside` when the bridge could not be installed. */
+export interface OnsideInitializeError {
+  reason: string;
+}
+
+/**
+ * A call that never reached native logic. Delivered as a real `Error`
+ * instance, so `error instanceof Error` distinguishes it from every domain
+ * error above.
+ */
+export interface OnsideBridgeError extends Error {
+  name: 'PontoonBridgeError';
+  code:
+    | 'bridgeDetached'
+    | 'brokenRequest'
+    | 'disallowedFrame'
+    | 'functionNotDefined'
+    | 'invalidArguments'
+    | 'parametersNotRepresentable'
+    | 'cannotSerializeResponse';
+}
