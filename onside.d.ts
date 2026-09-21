@@ -56,7 +56,21 @@ export interface OnsideJSBridge {
   /** Override the theme used for native UI presented from JS. */
   setAppearance(theme: 'light' | 'dark' | 'system'): Promise<void>;
 
-  /** Force local-only login methods on the login screen. */
+  /**
+   * Select the login flow; defaults to 'auto'.
+   * Used when external login is disabled or falls back.
+   * Await this setter before requesting login or starting a purchase.
+   */
+  setLoginMethod(method: JSLoginMethod): Promise<void>;
+
+  /**
+   * Enable the optional external login delegate; defaults to false.
+   * When enabled, `externalAccountToken` takes precedence over `setLoginMethod`.
+   * Await this setter before requesting login or starting a purchase.
+   */
+  setExternalLoginEnabled(enabled: boolean): Promise<void>;
+
+  /** @deprecated Use `setLoginMethod`: true maps to 'local', false to 'auto'. */
   setShouldForceLocalLoginMethods(force: boolean): Promise<void>;
 
   /**
@@ -90,6 +104,7 @@ export interface OnsideJSBridge {
 
   /**
    * Show the payment-methods management screen.
+   * Unavailable for profiles authenticated through external login.
    * Rejects with `OnsidePaymentMethodsManagerError`.
    */
   presentPaymentMethodsManager(): Promise<void>;
@@ -104,6 +119,8 @@ export interface OnsideJSBridge {
   /**
    * Load products by identifiers. Loaded products are also cached
    * natively for `purchase()` to look them up by `productIdentifier`.
+   * Subscriptions excluded for a external-login profile are returned in
+   * `unsupportedProductIdentifiers`.
    * Rejects with `OnsideProductsRequestError`.
    */
   loadProducts(input: { productIdentifiers: string[] }): Promise<JSProductsResponse>;
@@ -118,6 +135,9 @@ export interface OnsideJSBridge {
    * Subsequent state changes for this transaction are delivered via
    * `onTransactionsUpdated`. The promise itself only reports the
    * synchronous pre-flight outcome.
+   *
+   * External-login profiles cannot purchase subscriptions and require
+   * Apple Pay to be available for other purchases.
    *
    * Rejects with `JSPurchaseError`.
    */
@@ -175,6 +195,17 @@ export interface OnsideJSBridge {
   // Assign a function to the property to receive events. All callbacks
   // are optional; a missing handler is a no-op (except where noted).
 
+  /**
+   * Supplies the host's external_user_id when external login is enabled. May return a
+   * value synchronously or asynchronously. Called on demand, including login
+   * triggered by a purchase; the value is not cached by the bridge.
+   *
+   * A missing handler, null/undefined, a thrown error, a rejected Promise or
+   * an invalid result uses the current setLoginMethod value ('auto' by default).
+   * Session creation failure uses the same fallback. Empty strings are passed through.
+   */
+  externalAccountToken?(): string | null | undefined | Promise<string | null | undefined>;
+
   /** Transactions added to the queue or transitioned to a new state. */
   onTransactionsUpdated?(transactions: JSPaymentTransaction[]): void | Promise<void>;
 
@@ -227,6 +258,8 @@ export interface OnsideJSBridge {
 }
 
 // ═══════════════════════════ Domain types ═══════════════════════════
+
+export type JSLoginMethod = 'auto' | 'local';
 
 export interface JSPrice {
   value: number;
@@ -306,6 +339,8 @@ export interface JSSignedInAppsHistory {
 export interface JSProductsResponse {
   products: JSProduct[];
   invalidProductIdentifiers: string[];
+  /** Products unavailable for the current profile, including subscriptions for external login. */
+  unsupportedProductIdentifiers: string[];
 }
 
 /** Single value inside an event-parameter array. */
@@ -344,6 +379,7 @@ export type OnsideSignedInAppsHistoryRequestError =
 export type OnsidePaymentMethodsManagerError =
   | { loginDiscarded: {} }
   | { notSupportedInLocalTesting: {} }
+  | { notSupportedForExternalLogin: {} }
   | { presentationFailed: {} };
 
 export type OnsidePaymentQueueRequestRestoreError = { loginDiscarded: {} };
@@ -369,7 +405,9 @@ export type OnsideAttributionMetadataError =
 export type JSPurchaseError =
   | { unknownProduct: {} }
   | { loginDiscarded: {} }
-  | { rejectedAfterLogin: {} };
+  | { rejectedAfterLogin: {} }
+  | { notSupportedForExternalLogin: {} }
+  | { applePayRequired: {} };
 
 /** JS-bridge specific error for `finishTransaction`. */
 export type JSFinishTransactionError = { unknownTransaction: {} };
