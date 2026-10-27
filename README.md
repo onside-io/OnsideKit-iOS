@@ -42,15 +42,6 @@ Or add it to your `Package.swift`:
 .package(url: "https://github.com/onside-io/OnsideKit-iOS", from: "0.8.1")
 ```
 
-### CocoaPods
-Add one of the pods to your `Podfile`:
-
-```ruby
-pod 'OnsideKit', :git => 'https://github.com/onside-io/OnsideKit-iOS.git'
-# or, without Apple Pay / PassKit:
-# pod 'OnsideKitLite', :git => 'https://github.com/onside-io/OnsideKit-iOS.git'
-```
-
 ### Manual
 Download `OnsideKit.xcframework.zip` (or `OnsideKitLite.xcframework.zip`) from the [Releases](https://github.com/onside-io/OnsideKit-iOS/releases) page, drag the `.xcframework` into your target's **Frameworks, Libraries, and Embedded Content**, and select **Embed & Sign**.
 
