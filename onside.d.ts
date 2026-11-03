@@ -326,7 +326,8 @@ export interface JSPaymentTransaction {
 }
 
 export interface JSAttributionMetadata {
-  refererUrl?: string;
+  /** Passed through exactly as the Onside backend returned it. */
+  referer?: string;
 }
 
 export interface JSSignedInAppsHistory {
@@ -382,7 +383,9 @@ export type OnsidePaymentMethodsManagerError =
   | { notSupportedForExternalLogin: {} }
   | { presentationFailed: {} };
 
-export type OnsidePaymentQueueRequestRestoreError = { loginDiscarded: {} };
+export type OnsidePaymentQueueRequestRestoreError =
+  | { loginDiscarded: {} }
+  | { internalError: {} };
 
 export type OnsideTransactionsRestoreError =
   | { cancelled: {} }
@@ -393,7 +396,8 @@ export type OnsideTransactionsRestoreError =
 
 export type OnsidePaymentTransactionError =
   | { cancelled: {} }
-  | { presentationFailed: {} };
+  | { presentationFailed: {} }
+  | { internalError: {} };
 
 export type OnsideAttributionMetadataError =
   | { connectionError: {} }
@@ -407,7 +411,8 @@ export type JSPurchaseError =
   | { loginDiscarded: {} }
   | { rejectedAfterLogin: {} }
   | { notSupportedForExternalLogin: {} }
-  | { applePayRequired: {} };
+  | { applePayRequired: {} }
+  | { internalError: {} };
 
 /** JS-bridge specific error for `finishTransaction`. */
 export type JSFinishTransactionError = { unknownTransaction: {} };
