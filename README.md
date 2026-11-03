@@ -60,7 +60,7 @@ The full documentation covers installation, initialization, authentication, prod
 
 ### Other platforms
 *   **Web (`WKWebView`)** — call OnsideKit from JavaScript via the bridge. The contract is in [`onside.d.ts`](onside.d.ts); see the [JS ↔ Native Bridge](https://docs.onside.io/sdk/integrations/js-bridge) guide.
-*   **React Native / Expo** — install [`@onside-io/react-native-onsidekit`](https://www.npmjs.com/package/@onside-io/react-native-onsidekit) from npm: `npm install @onside-io/react-native-onsidekit`. The package bundles `OnsideKit.xcframework` of the same version and includes an Expo config plugin; see its README for setup.
+*   **React Native / Expo** — install [`@onside-io/react-native-onsidekit`](https://www.npmjs.com/package/@onside-io/react-native-onsidekit) from npm: `npm install @onside-io/react-native-onsidekit`. The package bundles `OnsideKit.xcframework` of the same version and includes an Expo config plugin. See the [React Native & Expo](https://docs.onside.io/sdk/integrations/react-native) guide.
 *   **Unity** — integrate from C# with the OnsideKit Unity package, available as a `.unitypackage` on the [Releases](https://github.com/onside-io/OnsideKit-iOS/releases) page. See the [Unity](https://docs.onside.io/sdk/integrations/unity) guide.
 
 ## Example
