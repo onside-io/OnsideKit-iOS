@@ -39,7 +39,7 @@ https://github.com/onside-io/OnsideKit-iOS
 Or add it to your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/onside-io/OnsideKit-iOS", from: "3.0.0")
+.package(url: "https://github.com/onside-io/OnsideKit-iOS", from: "3.0.1")
 ```
 
 ### Manual
