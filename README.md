@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">OnsideKit for iOS</h1>
 
-![iOS](https://img.shields.io/badge/iOS-16.0%2B-blue.svg) ![Xcode](https://img.shields.io/badge/Xcode-26.0%2B-blue.svg) [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/onside-io/OnsideKit-iOS/blob/main/LICENSE)
+![iOS](https://img.shields.io/badge/iOS-17.4%2B-blue.svg) ![Xcode](https://img.shields.io/badge/Xcode-26.0%2B-blue.svg) [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/onside-io/OnsideKit-iOS/blob/main/LICENSE)
 
 **OnsideKit** lets you integrate in-app purchases into your iOS app. It handles the entire payment flow — from product display to checkout — providing a secure experience for your users while keeping integration simple. The API is intentionally modeled on Apple's StoreKit, so it feels familiar to experienced iOS developers.
 
@@ -12,11 +12,11 @@
 *   **💳 Apple Pay & bank cards** — plus a built-in payment-methods management screen.
 *   **🛒 Unified purchase flow** — one process for consumable and non-consumable products.
 *   **⚠️ Clear, typed errors** — informative value types and a unified set of errors.
-*   **🌐 Native, web & Unity** — a native Swift API, a JavaScript bridge for `WKWebView`-based apps, and a Unity package.
+*   **🌐 Native, web, React Native & Unity** — a native Swift API, a JavaScript bridge for `WKWebView`-based apps, a React Native / Expo module, and a Unity package.
 *   **🧪 Offline local testing** — develop and QA purchases with a `.storekit` file, no backend required.
 
 ## Requirements
-*   iOS 16.0+
+*   iOS 17.4+
 *   Xcode 26+
 
 ## Distributions
@@ -39,7 +39,7 @@ https://github.com/onside-io/OnsideKit-iOS
 Or add it to your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/onside-io/OnsideKit-iOS", from: "0.8.1")
+.package(url: "https://github.com/onside-io/OnsideKit-iOS", from: "3.0.0")
 ```
 
 ### Manual
@@ -60,6 +60,7 @@ The full documentation covers installation, initialization, authentication, prod
 
 ### Other platforms
 *   **Web (`WKWebView`)** — call OnsideKit from JavaScript via the bridge. The contract is in [`onside.d.ts`](onside.d.ts); see the [JS ↔ Native Bridge](https://docs.onside.io/sdk/integrations/js-bridge) guide.
+*   **React Native / Expo** — install [`@onside-io/react-native-onsidekit`](https://www.npmjs.com/package/@onside-io/react-native-onsidekit) from npm: `npm install @onside-io/react-native-onsidekit`. The package bundles `OnsideKit.xcframework` of the same version and includes an Expo config plugin; see its README for setup.
 *   **Unity** — integrate from C# with the OnsideKit Unity package, available as a `.unitypackage` on the [Releases](https://github.com/onside-io/OnsideKit-iOS/releases) page. See the [Unity](https://docs.onside.io/sdk/integrations/unity) guide.
 
 ## Example

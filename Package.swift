@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "OnsideKit",
+    platforms: [.iOS("17.4")],
     products: [
         .library(name: "OnsideKit",     targets: ["OnsideKit"]),
         .library(name: "OnsideKitLite", targets: ["OnsideKitLite"])
@@ -12,13 +13,13 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "OnsideKit",
-            url: "https://github.com/onside-io/OnsideKit-iOS/releases/download/2.1.0/OnsideKit.xcframework.zip",
-            checksum: "215a7476036001b0b87411673543b8664f23d59b07dea969ed52bfffe4abbb0a"
+            url: "https://github.com/onside-io/OnsideKit-iOS/releases/download/3.0.0/OnsideKit.xcframework.zip",
+            checksum: "9ea589c00305ff4f2133c8ba2bf76c41cde8561c085f36e204e0ce4a79669e21"
         ),
         .binaryTarget(
             name: "OnsideKitLite",
-            url: "https://github.com/onside-io/OnsideKit-iOS/releases/download/2.1.0/OnsideKitLite.xcframework.zip",
-            checksum: "9e4ae11fc682f4b96710405e7773695cdc86008eda439367b96e6e3c1eccdb8c"
+            url: "https://github.com/onside-io/OnsideKit-iOS/releases/download/3.0.0/OnsideKitLite.xcframework.zip",
+            checksum: "d78e2c5b2944dc18720e1089dc53ca1b7e105a23cffe06b24de78cec3c9371b0"
         )
     ]
 )
